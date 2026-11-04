@@ -2,8 +2,8 @@ import axios from 'axios';
 
 // 1. API のベース設定（インスタンスの作成）
 const api = axios.create({
-    // 👇 'localhost' を AWSのパブリックIP に変更します
-    baseURL: 'http://3.26.64.167:3000',
+    // 👇 '/api' に変更して、Vercelのプロキシ経由でAWSに通信するようにします！
+    baseURL: '/api',
     headers: {
         'Content-Type': 'application/json',
     },
