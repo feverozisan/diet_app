@@ -1,14 +1,13 @@
 import axios from 'axios';
 
 // 1. API のベース設定（インスタンスの作成）
-const api = axios.create({
-    // 👇 '/api' に変更して、Vercelのプロキシ経由でAWSに通信するようにします！
-    baseURL: '/api',
+const api = axios.create( {
+    baseURL: 'http://3.26.64.167:3000', // 直接IPアドレスを指定
     headers: {
         'Content-Type': 'application/json',
     },
     withCredentials: true,
-});
+} );
 
     // 2. リクエスト・インターセプター（送信直前に自動で実行される処理）
     api.interceptors.request.use(
