@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 1. API のベース設定（インスタンスの作成）
 const api = axios.create( {
-    baseURL: 'api', // 直接IPアドレスを指定
+    baseURL: 'http://3.26.64.167:3000', // 直接IPアドレスを指定
     headers: {
         'Content-Type': 'application/json',
     },

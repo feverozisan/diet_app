@@ -1,10 +1,20 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "dashboard/index"
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  post "signup" => "users#create"
+  post "login" => "sessions#create"
+  delete "logout" => "sessions#destroy"
+
+  # ⚖️ 体重記録（WeightLog）
+  resources :weight_logs, only: [:index, :create, :destroy, :update]
+
+  # 例: PATCH /me でユーザー情報を更新できるようにする場合
+  patch '/me', to: 'users#update'
+
+  # 📊 ダッシュボード（まとめてデータ取得する場合）
+  get 'dashboard', to: 'dashboard#index' # ※ダッシュボード用コントローラーがある場合
+  resource :goal, only: [:show, :create, :update]
+  resources :daily_records, only: [:index, :create, :update, :destroy]
+  resources :meal_logs, only: [:index, :create, :destroy, :update]
 end

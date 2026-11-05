@@ -29,4 +29,11 @@ module DietApp
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
   end
+
+  module YourApp
+    class Application < Rails::Application
+      # Cookie ミドルウェアを有効化
+      config.middleware.use ActionDispatch::Cookies
+    end
+  end
 end
