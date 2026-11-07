@@ -22,3 +22,6 @@ production:
   cable:
     <<: *default
     database: diet_app_backend_production
+  queue:
+    <<: *default
+    database: diet_app_backend_production
