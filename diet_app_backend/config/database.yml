@@ -3,7 +3,7 @@ default: &default
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
-  password:
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
   host: 127.0.0.1
   port: 3306
 
@@ -14,3 +14,7 @@ development:
 test:
   <<: *default
   database: diet_app_backend_test
+
+production:
+  <<: *default
+  database: diet_app_backend_production
