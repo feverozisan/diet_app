@@ -17,6 +17,4 @@ class ApplicationController < ActionController::API
             render json: { errors: ['Unauthorized'] }, status: :unauthorized
         end
     end
-
-    skip_forgery_protection
 end
