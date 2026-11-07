@@ -2,8 +2,8 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
+  username: diet_user
+  password: password
   host: 127.0.0.1
   port: 3306
 
@@ -16,7 +16,9 @@ test:
   database: diet_app_backend_test
 
 production:
-  <<: *default
-  database: diet_app_backend_production
-  username: diet_user
-  password: password
+  primary:
+    <<: *default
+    database: diet_app_backend_production
+  cable:
+    <<: *default
+    database: diet_app_backend_production
