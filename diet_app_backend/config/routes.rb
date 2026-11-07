@@ -13,5 +13,6 @@ Rails.application.routes.draw do
     resource :goal, only: [:show, :create, :update]
     resources :daily_records, only: [:index, :create, :update, :destroy]
     resources :meal_logs, only: [:index, :create, :destroy, :update]
+    resources :users, only: [:create]
   end
 end
