@@ -25,3 +25,6 @@ production:
   queue:
     <<: *default
     database: diet_app_backend_production
+  cache:
+    <<: *default
+    database: diet_app_backend_production
