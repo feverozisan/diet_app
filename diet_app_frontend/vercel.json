@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "http://<あなたのAWS_EC2のIPアドレス>:3000/api/:match*"
+      "destination": "http://3.26.64.167:3000/api/:match*"
     }
   ]
 }
