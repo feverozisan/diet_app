@@ -1,3 +1,4 @@
+module Api
 class UsersController < ApplicationController
     # GET /me
     def me
@@ -46,4 +47,5 @@ class UsersController < ApplicationController
     def user_params
         params.require(:user).permit(:email, :password, :password_confirmation, :height, :age, :gender, :activity_level)
     end
+end
 end
