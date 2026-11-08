@@ -15,11 +15,23 @@ export default function LoginPage() {
 
         try {
             const response = await api.post('/login', { username, password });
-            const token = response.data.token;
+            console.log('ログインレスポンス:', response.data); // レスポンスの中身を確認
+
+            // サーバーから返ってくるキー名に合わせて取得（token, jwt, access_tokenなど）
+            const token = response.data.token || response.data.jwt || response.data.access_token;
+
+            if (!token) {
+                console.error('トークンが取得できませんでした:', response.data);
+                setError('ログイン処理に失敗しました（トークン未発行）。');
+                return;
+            }
+
+            // 正常なトークンのみ保存
             localStorage.setItem('token', token);
             navigate('/dashboard');
         } catch (err) {
-            setError('ユーザー名またはパスワードが正しくありません。');
+            console.error('ログインエラー:', err);
+            setError('ユーザー名またはパスパスワードが正しくありません。');
         }
     };
 
