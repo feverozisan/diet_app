@@ -1,27 +1,24 @@
 class AuthController < ApplicationController
-    #POST /login
+    # POST /login
     def login
-        user = User.find_by(email: params[:email])
+        user = User.find_by(email: params[:email]) || User.find_by(username: params[:username])
+
         if user&.authenticate(params[:password])
             token = JsonWebToken.encode(user_id: user.id)
-            cookies.signed[:jwt] = {
-                value: token,
-                httponly: true, # JSからのアクセスを防止 (XSS対策)
-                secure: Rails.env.production?, # 本番環境(HTTPS)のみ送信
-                same_site: :lax, # CSRF対策
-                expires: 24.hours.from_now
-            }
+
+            # JSON ボディで token を返却する（フロントエンドの localStorage 保存に合わせる）
+            render json: {
+                token: token,
+                user: { id: user.id, email: user.email, username: user.username }
+            }, status: :ok
         else
-            render json: { error: 'メールアドレスまたはパスワードが正しくありません' }, status: :unauthorized
+            render json: { error: 'ユーザー名/メールアドレスまたはパスワードが正しくありません' }, status: :unauthorized
         end
     end
 
     # ログアウト処理
     def destroy
-        # 1. jwt Cookieを削除する
-        cookies.delete(:jwt)
-
-        # 2. ログアウト成功メッセージを返す
+        # フロントエンド側で localStorage.removeItem('token') するため、メッセージのみ返却
         render json: { message: "Logged out successfully" }, status: :ok
     end
 end

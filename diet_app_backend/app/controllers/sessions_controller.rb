@@ -1,25 +1,16 @@
 class SessionsController < ApplicationController
     def create
-        user = User.find_by(email: params[:email])
+        user = User.find_by(email: params[:email]) || User.find_by(username: params[:username])
 
         if user&.authenticate(params[:password])
             token = JsonWebToken.encode(user_id: user.id)
-
-        # 🔐 セキュアなCookieとしてトークンを発行する設定
-        cookies[:jwt] = {
-            value: token,
-            httponly: true, # JavaScriptからの読み取りをブロック（XSS攻撃対策）
-            secure: Rails.env.production?, # 本番環境(AWS)ではHTTPS通信時のみ送信を許可
-            same_site: Rails.env.production? ? :none : :lax, # フロントエンドとバックエンドのドメインが異なる場合の設定
-            expires: 24.hours.from_now
-        }
-
-        render json: {
-            message: 'ログイン成功',
-            user: { id: user.id, email: user.email } # トークンはJSONから外し、ユーザー情報のみ返す
-        }, status: :ok
+            # 👇 確実に token を JSON として返す
+            render json: {
+                token: token,
+                user: { id: user.id, username: user.username }
+            }, status: :ok
         else
-            render json: { error: "メールアドレスまたはパスワードが正しくありません" }, status: :unauthorized
+            render json: { error: 'Invalid username or password' }, status: :unauthorized
         end
     end
 

@@ -1,20 +1,23 @@
-# app/controllers/application_controller.rb
 class ApplicationController < ActionController::API
     def authenticate_request
-        # Authorization ヘッダーから "Bearer <TOKEN>" を取得
         header = request.headers['Authorization']
         token = header.split(' ').last if header.present?
 
-        if token.present?
-            begin
-                # トークンをデコードしてユーザーを取得
-                decoded = JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
-                @current_user = User.find(decoded['user_id'])
-            rescue ActiveRecord::RecordNotFound, JWT::DecodeError, JWT::ExpiredSignature
-                render json: { errors: ['Unauthorized'] }, status: :unauthorized
+        if token.blank? || token == "undefined"
+            render json: { error: 'Not Authorized (No Token)' }, status: :unauthorized
+            return
+        end
+
+        begin
+            decoded = JsonWebToken.decode(token)
+            # decoded が nil またはハッシュ以外の場合のガード
+            if decoded.present? && decoded[:user_id].present?
+                @current_user = User.find(decoded[:user_id])
+            else
+                render json: { error: 'Not Authorized (Invalid Payload)' }, status: :unauthorized
             end
-        else
-            render json: { errors: ['Unauthorized'] }, status: :unauthorized
+        rescue ActiveRecord::RecordNotFound, JWT::DecodeError => e
+            render json: { error: 'Not Authorized (Invalid Token)' }, status: :unauthorized
         end
     end
 end
