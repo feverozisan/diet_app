@@ -1,3 +1,4 @@
+module Api
 class MealLogsController < ApplicationController
     before_action :authenticate_request # 認証フィルターを有効化
 
@@ -38,4 +39,5 @@ class MealLogsController < ApplicationController
     def meal_log_params
         params.require(:meal_log).permit(:meal_type, :name, :calories, :protein, :fat, :carbs, :recorded_at)
     end
+end
 end
