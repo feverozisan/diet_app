@@ -1,51 +1,46 @@
 module Api
-class UsersController < ApplicationController
-    # GET /me
-    def me
-        user = User.first # 現在はテスト用として最初のユーザーを取得
+    class UsersController < ApplicationController
+        # GET /api/me
+        def me
+            user = @current_user || User.first
 
-        if user
-            render json: {
-                id: user.id,
-                email: user.email,
-                height: user.height,
-                age: user.age,
-                gender: user.gender,
-                activity_level: user.activity_level
-            }, status: :ok
-        else
-            render json: { error: "ユーザーが見つかりません" }, status: :not_found
+            if user
+                render json: user_response(user), status: :ok
+            else
+                render json: { error: "ユーザーが見つかりません" }, status: :not_found
+            end
+        end
+
+        # PATCH /api/me
+        def update
+            user = @current_user || User.first
+
+            if user&.update(user_params)
+                # 更新後も全情報を返却する
+                render json: user_response(user), status: :ok
+            else
+                render json: { errors: user&.errors&.full_messages || ["ユーザーが見つかりません"] }, status: :unprocessable_entity
+            end
+        end
+
+        private
+
+        # ユーザー情報を整形して返すヘルパーメソッド
+        def user_response(user)
+        {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            height: user.height,
+            target_weight: user.target_weight,
+            age: user.age,
+            gender: user.gender,
+            activity_level: user.activity_level
+        }
+        end
+
+        def user_params
+            params.require(:user).permit(:username, :email, :height, :target_weight, :age, :gender, :activity_level)
         end
     end
-
-    # POST /signup
-    def create
-        @user = User.new(user_params)
-
-        if @user.save
-            render json: @user.as_json(except: [:password_digest]), status: :created
-        else
-            render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
-        end
-    end
-
-    # PATCH /me または PUT /me
-    def update
-        # テスト用として @current_user または User.first を使用
-        user = @current_user || User.first
-
-        if user&.update(user_params)
-            render json: { id: user.id, height: user.height, age: user.age }, status: :ok
-        else
-            render json: { errors: user&.errors&.full_messages || ["ユーザーが見つかりません"] }, status: :unprocessable_entity
-        end
-    end
-
-    private
-
-    # ストロングパラメータ：height の許可を追加済み
-    def user_params
-        params.require(:user).permit(:email, :password, :password_confirmation, :height, :age, :gender, :activity_level)
-    end
-end
 end
