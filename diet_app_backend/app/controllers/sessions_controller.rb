@@ -1,17 +1,26 @@
-# app/controllers/api/sessions_controller.rb の場合
+# app/controllers/api/sessions_controller.rb
 module Api
     class SessionsController < ApplicationController
         def create
-            user = User.find_by(email: params[:email]) || User.find_by(username: params[:username])
+            user = User.find_by(username: params[:session][:username])
 
-            if user&.authenticate(params[:password])
-                token = JsonWebToken.encode(user_id: user.id)
+            if user && user.authenticate(params[:session][:password])
+                # ログイン成功時に、ユーザーのプロフィール情報も一緒に返す
                 render json: {
-                token: token,
-                user: { id: user.id, username: user.username }
+                    message: "ログインに成功しました",
+                    user: {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                        height: user.height,
+                        target_weight: user.target_weight,
+                        age: user.age,
+                        gender: user.gender,
+                        activity_level: user.activity_level
+                    }
                 }, status: :ok
             else
-                render json: { error: 'Invalid username or password' }, status: :unauthorized
+                render json: { error: "認証に失敗しました" }, status: :unauthorized
             end
         end
 
