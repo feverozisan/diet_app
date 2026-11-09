@@ -1,14 +1,15 @@
 module Api
     class SessionsController < ApplicationController
-        include ActionController::Cookies #
+        include ActionController::Cookies
+
         def create
             user = User.find_by(username: params[:session][:username])
 
             if user && user.authenticate(params[:session][:password])
-                # JWTトークンの生成（既存の認証機構に合わせて調整してください）
+                # JWTトークンの生成
                 token = JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, Rails.application.secret_key_base)
 
-                # クッキーにトークンをセット（SameSite/Secureを本番向けに設定）
+                # クッキーにもセットしておく（念のため）
                 cookies[:jwt] = {
                     value: token,
                     httponly: true,
@@ -17,8 +18,10 @@ module Api
                     expires: 24.hours.from_now
                 }
 
+                # 👈 ★ここがポイント：JSONレスポンスの中に token を追加する！
                 render json: {
                     message: "ログインに成功しました",
+                    token: token,
                     user: {
                         id: user.id,
                         username: user.username,
