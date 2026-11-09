@@ -1,11 +1,21 @@
-# app/controllers/api/sessions_controller.rb
 module Api
     class SessionsController < ApplicationController
         def create
             user = User.find_by(username: params[:session][:username])
 
             if user && user.authenticate(params[:session][:password])
-                # ログイン成功時に、ユーザーのプロフィール情報も一緒に返す
+                # JWTトークンの生成（既存の認証機構に合わせて調整してください）
+                token = JWT.encode({ user_id: user.id, exp: 24.hours.from_now.to_i }, Rails.application.secret_key_base)
+
+                # クッキーにトークンをセット（SameSite/Secureを本番向けに設定）
+                cookies[:jwt] = {
+                    value: token,
+                    httponly: true,
+                    secure: Rails.env.production?,
+                    same_site: :lax,
+                    expires: 24.hours.from_now
+                }
+
                 render json: {
                     message: "ログインに成功しました",
                     user: {
