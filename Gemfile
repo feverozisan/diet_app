@@ -51,5 +51,5 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # 🧪 追加：RSpecによるテスト環境
-  gem "rspec-rails", "~> 6.0"
+  gem "rspec-rails", "~> 8.1"
 end
