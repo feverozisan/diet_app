@@ -1,57 +1,44 @@
-# app/controllers/weight_logs_controller.rb
-class WeightLogsController < ApplicationController
+module Api
+  class WeightLogsController < ApplicationController
     before_action :authenticate_request
-    before_action :set_weight_log, only: [:show, :update, :destroy] # 👈 :update も追加！
 
-    # GET /weight_logs
+    # GET /api/weight_logs
     def index
-        @weight_logs = @current_user.weight_logs.order(recorded_at: :desc)
-        render json: @weight_logs
+      logs = @current_user.weight_logs.order(recorded_at: :desc)
+      render json: logs
     end
 
-    # GET /weight_logs/:id
-    def show
-        render json: @weight_log
-    end
-
-    # POST /weight_logs
+    # POST /api/weight_logs
     def create
-        @weight_log = @current_user.weight_logs.find_or_initialize_by(
-            recorded_at: weight_log_params[:recorded_at]
-        )
-
-        if @weight_log.update(weight_log_params)
-            render json: @weight_log, status: :ok
-        else
-            render json: { errors: @weight_log.errors.full_messages }, status: :unprocessable_entity
-        end
+      log = @current_user.weight_logs.build(weight_log_params)
+      if log.save
+        render json: log, status: :created
+      else
+        render json: { errors: log.errors.full_messages }, status: :unprocessable_entity
+      end
     end
 
-    # PUT/PATCH /weight_logs/:id
+    # PATCH/PUT /api/weight_logs/:id  ← ここを追加！
     def update
-        # before_action で見つかった @weight_log をそのまま更新
-        if @weight_log.update(weight_log_params)
-            render json: @weight_log, status: :ok
-        else
-            render json: { errors: @weight_log.errors.full_messages }, status: :unprocessable_entity
-        end
+      log = @current_user.weight_logs.find(params[:id])
+      if log.update(weight_log_params)
+        render json: log
+      else
+        render json: { errors: log.errors.full_messages }, status: :unprocessable_entity
+      end
     end
 
-    # DELETE /weight_logs/:id
+    # DELETE /api/weight_logs/:id
     def destroy
-        @weight_log.destroy
-        render json: { message: "削除しました" }, status: :ok
+      log = @current_user.weight_logs.find(params[:id])
+      log.destroy
+      render json: { message: "Weight log deleted successfully" }
     end
 
     private
 
-    # 共通のデータ取得処理（他人のデータにアクセスできないよう @current_user から検索）
-    def set_weight_log
-        @weight_log = @current_user.weight_logs.find_by(id: params[:id])
-        render json: { errors: ['Record not found'] }, status: :not_found unless @weight_log
-    end
-
     def weight_log_params
-        params.require(:weight_log).permit(:weight, :recorded_at, :memo)
+      params.require(:weight_log).permit(:weight, :recorded_at, :memo)
     end
+  end
 end
