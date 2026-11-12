@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "http://3.26.64.167:3000/api/:match*"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
