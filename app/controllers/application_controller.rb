@@ -25,4 +25,8 @@ class ApplicationController < ActionController::API
             render json: { error: 'Not Authorized (Invalid Token)' }, status: :unauthorized
         end
     end
+
+    def fallback_index_html
+        render file: Rails.root.join('public', 'index.html'), layout: false
+    end
 end

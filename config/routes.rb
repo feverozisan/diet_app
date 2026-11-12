@@ -15,4 +15,10 @@ Rails.application.routes.draw do
     resources :meal_logs, only: [:index, :create, :destroy, :update]
     resources :users, only: [:create]
   end
+
+  # --- ▼ ここから下をファイルの一番最後に追記する ▼ ---
+  # /api/ 以外のリクエスト（ブラウザのリロード時など）はすべて public/index.html を返す
+  get '*path', to: 'application#fallback_index_html', constraints: ->(request) do
+    !request.xhr? && request.format.html?
+  end
 end
