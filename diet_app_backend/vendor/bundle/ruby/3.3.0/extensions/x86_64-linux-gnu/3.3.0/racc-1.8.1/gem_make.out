@@ -1,0 +1,18 @@
+current directory: /home/ubuntu/diet_app/diet_app_backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+/usr/bin/ruby3.3 -I/usr/lib/ruby/vendor_ruby extconf.rb
+creating Makefile
+
+current directory: /home/ubuntu/diet_app/diet_app_backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20261106-146329-x1hozc sitelibdir\=./.gem.20261106-146329-x1hozc clean
+
+current directory: /home/ubuntu/diet_app/diet_app_backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20261106-146329-x1hozc sitelibdir\=./.gem.20261106-146329-x1hozc
+compiling cparse.c
+linking shared-object racc/cparse.so
+
+current directory: /home/ubuntu/diet_app/diet_app_backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20261106-146329-x1hozc sitelibdir\=./.gem.20261106-146329-x1hozc install
+/usr/bin/install -c -m 0755 cparse.so ./.gem.20261106-146329-x1hozc/racc
+
+current directory: /home/ubuntu/diet_app/diet_app_backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20261106-146329-x1hozc sitelibdir\=./.gem.20261106-146329-x1hozc clean

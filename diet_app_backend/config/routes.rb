@@ -15,4 +15,9 @@ Rails.application.routes.draw do
     resources :meal_logs, only: [:index, :create, :destroy, :update]
     resources :users, only: [:create]
   end
+
+  # API 以外のリクエストはすべてフロントエンド（index.html）へ流す
+  get '*path', to: 'application#fallback_index_html', constraints: ->(request) do
+    !request.xhr? && request.format.html?
+  end
 end
