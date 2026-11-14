@@ -23,6 +23,17 @@ module Api
             end
         end
 
+        def create
+            user = User.new(user_params)
+            if user.save
+                # 登録成功時のレスポンス（例: ユーザー情報を返す）
+                render json: { status: 'SUCCESS', data: user }, status: :created
+            else
+                # 失敗時のレスポンス（エラーメッセージを返す）
+                render json: { status: 'ERROR', data: user.errors }, status: :unprocessable_entity
+            end
+        end
+
         private
 
         # ユーザー情報を整形して返すヘルパーメソッド
