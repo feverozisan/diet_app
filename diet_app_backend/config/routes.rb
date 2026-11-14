@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  root "dashboard#index"
+  # 根元にアクセスしたときは Rails の health check を表示する
+  root "rails/health#show"
 
-  get "dashboard/index"
   get "up" => "rails/health#show", as: :rails_health_check
 
   namespace :api do
