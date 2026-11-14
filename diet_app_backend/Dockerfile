@@ -53,9 +53,13 @@ RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
 
 
-
 # Final stage for app image
 FROM base
+
+# Install runtime libraries required for mysql2 / mariadb
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y libmariadb3 && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
