@@ -51,7 +51,18 @@ module Api
         end
 
         def user_params
-            params.require(:user).permit(:username, :email, :height, :target_weight, :age, :gender, :activity_level)
+            # password と password_confirmation を許可するリストに追加する
+            params.require(:user).permit(
+                :username,
+                :email,
+                :password,               # ← 追加
+                :password_confirmation,  # ← 追加
+                :height,
+                :target_weight,
+                :age,
+                :gender,
+                :activity_level
+            )
         end
     end
 end
