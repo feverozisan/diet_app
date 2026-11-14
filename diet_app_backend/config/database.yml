@@ -17,14 +17,15 @@ test:
 
 production:
   primary:
-    <<: *default
-    database: diet_app_backend_production
+    adapter: sqlite3
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    database: storage/production.sqlite3
   cable:
-    <<: *default
-    database: diet_app_backend_production
+    adapter: sqlite3
+    database: storage/production_cable.sqlite3
   queue:
-    <<: *default
-    database: diet_app_backend_production
+    adapter: sqlite3
+    database: storage/production_queue.sqlite3
   cache:
-    <<: *default
-    database: diet_app_backend_production
+    adapter: sqlite3
+    database: storage/production_cache.sqlite3
