@@ -1,6 +1,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
-        origins 'http://localhost:5173', 'http://localhost:3000', 'https://diet-9vlqt0dob-inmu1.vercel.app'
+        # localhostに加え、*.vercel.app のサブドメインをすべて許可する
+        origins 'http://localhost:5173', 'http://localhost:3000', /\.vercel\.app\z/
 
         resource '*',
             headers: :any,
