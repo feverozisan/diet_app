@@ -1,23 +1,22 @@
 import axios from 'axios';
 
 // 1. API のベース設定（インスタンスの作成）
-const api = axios.create( {
-    baseURL: '/api', // 直接IPアドレスを指定
+const api = axios.create({
+    // Vercelに設定した VITE_API_URL を読み込み、なければローカルを向く
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
     withCredentials: true,
-} );
+});
 
-    // 2. リクエスト・インターセプター（送信直前に自動で実行される処理）
-    api.interceptors.request.use(
+// (インターセプターの記述はそのまま)
+api.interceptors.request.use(
     (config) => {
-        // ブラウザの localStorage から保存されたトークンを取得
         if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('token');
-        if (token) {
-            // トークンが存在すれば Authorization ヘッダーにセット
-            config.headers.Authorization = `Bearer ${token}`;
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
             }
         }
         return config;
@@ -25,7 +24,6 @@ const api = axios.create( {
     (error) => {
         return Promise.reject(error);
     }
-
 );
 
 export default api;
