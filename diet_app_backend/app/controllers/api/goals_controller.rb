@@ -24,12 +24,14 @@ module Api
       end
     end
 
-    # PUT/PATCH /api/goal
+# PUT/PATCH /api/goal
     def update
-      goal = @current_user.goal || @current_user.build_goal(goal_params)
+      # ユーザーの既存の goal を取得するか、なければ新しくビルドする
+      goal = @current_user.goal || @current_user.build_goal
 
-      if goal.persisted? ? goal.update(goal_params) : goal.save
-        render json: goal
+      # パスワードと同様に、送られてきたパラメータを割り当てて保存する
+      if goal.update(goal_params)
+        render json: goal, status: :ok
       else
         render json: { errors: goal.errors.full_messages }, status: :unprocessable_entity
       end
