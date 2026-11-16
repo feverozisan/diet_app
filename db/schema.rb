@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_130821) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_08_124458) do
   create_table "daily_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
@@ -55,6 +55,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_130821) do
     t.string "password_digest"
     t.decimal "target_weight", precision: 10
     t.datetime "updated_at", null: false
+    t.string "username"
   end
 
   create_table "weight_logs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
